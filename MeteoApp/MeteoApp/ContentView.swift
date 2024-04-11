@@ -1,3 +1,9 @@
+//
+//  ContentView.swift
+//  MeteoApp
+//
+//  Created by Tech Info on 2024-04-10.
+
 import SwiftUI
 import CoreLocation
 
@@ -51,9 +57,10 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
 }
 
 func getCurrentDate() -> String{
+    print("date", Date.now)
     let currentDate = Date()
     let dateFormator = DateFormatter()
-    dateFormator.dateFormat = "dd MMM yyyy"
+    dateFormator.dateFormat = "dd mm yyyy"
     return dateFormator.string(from: currentDate)
 }
 
@@ -74,17 +81,14 @@ func celcuisToFareinteit() {
 }
 
 struct ContentView: View {
-    @StateObject var locationManager = LocationManager()
-    @State private var currentCity: String = "Loading..."
-
     var body: some View {
         VStack {
             GroupBox() { // on mettra l image correspondant a la
-                GroupBox() {
+                GroupBox() { // on mettra l image correspondant a la meteo
                     VStack {
-                        Text(currentCity)
+                        Text(getLocalisation())
                         Text(getCurrentDate())
-
+                        
                         Image("rainy")
                             .resizable()
                             .frame(width: 250, height: 250)

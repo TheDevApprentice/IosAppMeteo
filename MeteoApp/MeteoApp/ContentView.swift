@@ -7,55 +7,6 @@
 import SwiftUI
 import CoreLocation
 
-class LocationManager: NSObject, CLLocationManagerDelegate {
-    private let locationManager = CLLocationManager()
-    var completionHandler: ((String?) -> Void)?
-
-    override init() {
-        super.init()
-        self.locationManager.delegate = self
-    }
-
-    func getCurrentCity(completion: @escaping (String?) -> Void) {
-        self.completionHandler = completion
-        self.locationManager.requestWhenInUseAuthorization()
-        self.locationManager.requestLocation()
-    }
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.first else {
-            self.completionHandler?(nil)
-            return
-        }
-
-        let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
-            if let error = error {
-                print("Reverse geocoding failed with error: \(error.localizedDescription)")
-                self.completionHandler?(nil)
-                return
-            }
-
-            if let placemark = placemarks?.first {
-                if let city = placemark.locality {
-                    self.completionHandler?(city)
-                } else {
-                    print("No city found")
-                    self.completionHandler?(nil)
-                }
-            } else {
-                print("No placemarks found")
-                self.completionHandler?(nil)
-            }
-        }
-    }
-
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Location manager failed with error: \(error.localizedDescription)")
-        self.completionHandler?(nil)
-    }
-}
-
 func getCurrentDate() -> String{
     print("date", Date.now)
     let currentDate = Date()
@@ -64,29 +15,44 @@ func getCurrentDate() -> String{
     return dateFormator.string(from: currentDate)
 }
 
-func getCurrentWeather(date: Date) {
+let latitude = 46.116669
+let longitude = -70.666664
+let timezone = "America/New_York"
+let forecastDays = 3
+
+struct WeatherResponse: Decodable {
+    let current: CurrentWeather
+    let daily: DailyWeather
+}
+
+struct CurrentWeather: Decodable {
+    let temperature_2m: Double
+}
+
+struct DailyWeather: Decodable {
+    let temperature_2m_max: [Double]
+    let temperature_2m_min: [Double]
+}
+
+func fetchWeatherData() async throws -> WeatherResponse{
+    let url = URL(string: "https://api.open-meteo.com/v1/forecast?latitude=\(latitude)&longitude=\(longitude)&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=\(timezone)&forecast_days=\(forecastDays)")!
     
+    let (data, _) = try await URLSession.shared.data(from: url )
+    let decoded = try JSONDecoder().decode(WeatherResponse.self, from: data)
+    
+    print(decoded.self)
+    return decoded.self
 }
 
-func getWeatherCode() {
-    print("localisation")
-}
-
-func getWeatherToCome() {
-    print("localisation")
-}
-
-func celcuisToFareinteit() {
-    print("localisation")
-}
 
 struct ContentView: View {
+    @State private var WeatherResponse : WeatherResponse?
     var body: some View {
         VStack {
             GroupBox() { // on mettra l image correspondant a la
                 GroupBox() { // on mettra l image correspondant a la meteo
                     VStack {
-                        Text(getLocalisation())
+                        Text("Saint-Georges")
                         Text(getCurrentDate())
                         
                         Image("rainy")
@@ -96,7 +62,7 @@ struct ContentView: View {
                         Text("temperature")
                     }
                 }
-                GroupBox() { // on mettra la temperature meteo
+                GroupBox() {
                     VStack {
                         Text("A venir")
                         HStack {
@@ -139,8 +105,15 @@ struct ContentView: View {
             }
         }
         .onAppear{
-            
-        }
+            Task {
+                do {
+                    let weatherData = try await fetchWeatherData()
+
+                    print(weatherData)
+                } catch {
+                    print(error)
+                }
+            }        }
         .padding()
     }
 }

@@ -14,6 +14,7 @@
 		B39398432BC6C1E7003F0C1A /* MeteoAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39398422BC6C1E7003F0C1A /* MeteoAppTests.swift */; };
 		B393984D2BC6C1E7003F0C1A /* MeteoAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393984C2BC6C1E7003F0C1A /* MeteoAppUITests.swift */; };
 		B393984F2BC6C1E7003F0C1A /* MeteoAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393984E2BC6C1E7003F0C1A /* MeteoAppUITestsLaunchTests.swift */; };
+		B393985D2BC8678B003F0C1A /* OpenMeteoSdk in Frameworks */ = {isa = PBXBuildFile; productRef = B393985C2BC8678B003F0C1A /* OpenMeteoSdk */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B393985D2BC8678B003F0C1A /* OpenMeteoSdk in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,6 +145,9 @@
 			dependencies = (
 			);
 			name = MeteoApp;
+			packageProductDependencies = (
+				B393985C2BC8678B003F0C1A /* OpenMeteoSdk */,
+			);
 			productName = MeteoApp;
 			productReference = B393982E2BC6C1E7003F0C1A /* MeteoApp.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +220,9 @@
 				Base,
 			);
 			mainGroup = B39398252BC6C1E7003F0C1A;
+			packageReferences = (
+				B393985B2BC8678B003F0C1A /* XCRemoteSwiftPackageReference "sdk" */,
+			);
 			productRefGroup = B393982F2BC6C1E7003F0C1A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -583,6 +591,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B393985B2BC8678B003F0C1A /* XCRemoteSwiftPackageReference "sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/open-meteo/sdk.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B393985C2BC8678B003F0C1A /* OpenMeteoSdk */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B393985B2BC8678B003F0C1A /* XCRemoteSwiftPackageReference "sdk" */;
+			productName = OpenMeteoSdk;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B39398262BC6C1E7003F0C1A /* Project object */;
 }

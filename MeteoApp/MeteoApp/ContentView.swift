@@ -25,6 +25,7 @@ func formatDate(_ dateString: String) -> String {
         return "Date inconnue"
     }
 }
+
 func formatDateForecast(_ dateString: String) -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -120,7 +121,7 @@ struct ContentView: View {
                                 .foregroundColor(.accentColor)
                             
                             Text(formatTemperature(response.current.temperature_2m))
-                                   .padding(.top, 10) // Ajoute un padding en haut pour ajuster la position du texte de température
+                                   .padding(.top, 10)
                                
                                Spacer()
 
@@ -169,7 +170,6 @@ struct ContentView: View {
         .padding()
     }
 }
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
